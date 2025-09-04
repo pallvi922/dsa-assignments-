@@ -1,6 +1,13 @@
 #include <iostream>
 using namespace std;
 
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0; 
+}
+
 int main() {
     char infix[100], st[100], postfix[100];
     int top = -1, k = 0;
@@ -9,6 +16,8 @@ int main() {
 
     for (int i = 0; infix[i] != '\0'; i++) {
         char c = infix[i];
+
+      
         if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
             postfix[k++] = c;
         }
@@ -16,22 +25,28 @@ int main() {
             st[++top] = c;
         }
         else if (c == ')') {
+           
             while (top != -1 && st[top] != '(') {
                 postfix[k++] = st[top--];
             }
             top--;
         }
-        else {  
-            while (top != -1 && (st[top] == '*' || st[top] == '/' || st[top] == '+' || st[top] == '-')) {
+        else {
+            
+            while (top != -1 && precedence(st[top]) >= precedence(c)) {
                 postfix[k++] = st[top--];
             }
             st[++top] = c;
         }
     }
+
+   
     while (top != -1) {
         postfix[k++] = st[top--];
     }
     postfix[k] = '\0';
 
     cout << "Postfix: " << postfix;
+
+    return 0;
 }
