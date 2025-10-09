@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 50
+
+class Queue {
+    int arr[SIZE];
+    int front, rear;
+public:
+    Queue() { front = rear = -1; }
+
+    bool isEmpty() { return (front == -1 || front > rear); }
+
+    void enqueue(int x) {
+        if (rear == SIZE - 1) cout << "Queue Full\n";
+        else {
+            if (front == -1) front = 0;
+            arr[++rear] = x;
+        }
+    }
+
+    int dequeue() {
+        if (isEmpty()) return -1;
+        return arr[front++];
+    }
+
+    int frontVal() {
+        if (isEmpty()) return -1;
+        return arr[front];
+    }
+
+    int size() {
+        if (isEmpty()) return 0;
+        return rear - front + 1;
+    }
+};
+
+class Stack {
+    Queue q;
+public:
+    void push(int x) {
+        q.enqueue(x);
+        int s = q.size();
+        for (int i = 0; i < s - 1; i++) {
+            q.enqueue(q.dequeue());
+        }
+    }
+
+    void pop() {
+        if (q.isEmpty()) cout << "Stack Empty\n";
+        else q.dequeue();
+    }
+
+    int top() {
+        if (q.isEmpty()) return -1;
+        return q.frontVal();
+    }
+};
+
+int main() {
+    Stack s;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    cout << "Top element: " << s.top() << endl;
+    s.pop();
+    cout << "Top after pop: " << s.top() << endl;
+    return 0;
+}
