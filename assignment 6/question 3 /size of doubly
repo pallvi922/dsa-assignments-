@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+};
+
+Node* newNode(int data) {
+    Node* temp = new Node;
+    temp->data = data;
+    temp->prev = temp->next = nullptr;
+    return temp;
+}
+
+int sizeOfDoublyLinkedList(Node* head) {
+    int count = 0;
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        count++;
+        temp = temp->next;
+    }
+
+    return count;
+}
+
+int main() {
+   
+    Node* head = newNode(10);
+    head->next = newNode(20);
+    head->next->prev = head;
+    head->next->next = newNode(30);
+    head->next->next->prev = head->next;
+    head->next->next->next = newNode(40);
+    head->next->next->next->prev = head->next->next;
+
+    cout << "Size of Doubly Linked List: " << sizeOfDoublyLinkedList(head) << endl;
+
+    return 0;
+}
