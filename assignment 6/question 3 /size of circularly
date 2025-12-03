@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* newNode(int data) {
+    Node* temp = new Node;
+    temp->data = data;
+    temp->next = nullptr;
+    return temp;
+}
+
+int sizeOfCircularLinkedList(Node* head) {
+    if (head == nullptr)
+        return 0;
+
+    int count = 0;
+    Node* temp = head;
+
+    do {
+        count++;
+        temp = temp->next;
+    } while (temp != head);
+
+    return count;
+}
+
+int main() {
+ 
+  Node* head = newNode(10);
+    Node* second = newNode(20);
+    Node* third = newNode(30);
+    Node* fourth = newNode(40);
+
+    head->next = second;
+    second->next = third;
+    third->next = fourth;
+    fourth->next = head;
+
+    cout << "Size of Circular Linked List: " << sizeOfCircularLinkedList(head) << endl;
+
+    return 0;
+}
