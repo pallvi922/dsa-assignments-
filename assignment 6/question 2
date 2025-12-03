@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* newNode(int data) {
+    Node* temp = new Node;
+    temp->data = data;
+    temp->next = nullptr;
+    return temp;
+}
+
+void display(Node* head) {
+    if (head == nullptr) {
+        cout << "List is empty." << endl;
+        return;
+    }
+
+    Node* temp = head;
+    do {
+        cout << temp->data << " ";
+        temp = temp->next;
+    } while (temp != head);
+
+    cout << head->data << endl;
+}
+
+int main() {
+   
+    Node* head = newNode(20);
+    Node* second = newNode(100);
+    Node* third = newNode(40);
+    Node* fourth = newNode(80);
+    Node* fifth = newNode(60);
+
+    head->next = second;
+    second->next = third;
+    third->next = fourth;
+    fourth->next = fifth;
+    fifth->next = head; 
+
+    cout << "Circular List, repeating head at end: ";
+    display(head);
+
+    return 0;
+}
