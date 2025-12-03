@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    Node* left;
+    Node* right;
+};
+
+Node* create(int x){
+    Node* n = new Node;
+    n->data = x;
+    n->left = n->right = NULL;
+    return n;
+}
+
+Node* insert(Node* root, int x){
+    if(root == NULL) return create(x);
+    if(x < root->data) root->left = insert(root->left, x);
+    else if(x > root->data) root->right = insert(root->right, x);
+    return root;
+}
+
+Node* minNode(Node* root){
+    while(root->left) root = root->left;
+    return root;
+}
+
+Node* deleteNode(Node* root, int key){
+    if(root == NULL) return root;
+    if(key < root->data) root->left = deleteNode(root->left, key);
+    else if(key > root->data) root->right = deleteNode(root->right, key);
+    else{
+        if(root->left == NULL){
+            Node* t = root->right;
+            delete root;
+            return t;
+        }
+        else if(root->right == NULL){
+            Node* t = root->left;
+            delete root;
+            return t;
+        }
+        Node* t = minNode(root->right);
+        root->data = t->data;
+        root->right = deleteNode(root->right, t->data);
+    }
+    return root;
+}
+
+int maxDepth(Node* root){
+    if(root == NULL) return 0;
+    int l = maxDepth(root->left);
+    int r = maxDepth(root->right);
+    return (l > r ? l : r) + 1;
+}
+
+int minDepth(Node* root){
+    if(root == NULL) return 0;
+    int l = minDepth(root->left);
+    int r = minDepth(root->right);
+    if(l == 0) return r + 1;
+    if(r == 0) return l + 1;
+    return (l < r ? l : r) + 1;
+}
+
+void inorder(Node* root){
+    if(root == NULL) return;
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
+}
+
+int main(){
+    Node* root = NULL;
+    int a[] = {50, 30, 20, 40, 70, 60, 80};
+    for(int x : a) root = insert(root, x);
+
+    inorder(root); cout << endl;
+
+    root = deleteNode(root, 20);
+    root = deleteNode(root, 30);
+    root = deleteNode(root, 50);
+
+    inorder(root); cout << endl;
+
+    cout << maxDepth(root) << endl;
+    cout << minDepth(root) << endl;
+}
