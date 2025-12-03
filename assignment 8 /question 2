@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    Node* left;
+    Node* right;
+};
+
+Node* create(int x){
+    Node* n = new Node;
+    n->data = x;
+    n->left = n->right = NULL;
+    return n;
+}
+
+Node* insert(Node* root, int x){
+    if(root == NULL) return create(x);
+    if(x < root->data) root->left = insert(root->left, x);
+    else root->right = insert(root->right, x);
+    return root;
+}
+
+Node* searchR(Node* root, int key){
+    if(root == NULL || root->data == key) return root;
+    if(key < root->data) return searchR(root->left, key);
+    return searchR(root->right, key);
+}
+
+Node* searchNR(Node* root, int key){
+    while(root != NULL && root->data != key){
+        if(key < root->data) root = root->left;
+        else root = root->right;
+    }
+    return root;
+}
+
+Node* minNode(Node* root){
+    while(root && root->left) root = root->left;
+    return root;
+}
+
+Node* maxNode(Node* root){
+    while(root && root->right) root = root->right;
+    return root;
+}
+
+Node* inorderSuccessor(Node* root, Node* x){
+    if(x->right) return minNode(x->right);
+    Node* succ = NULL;
+    while(root){
+        if(x->data < root->data){
+            succ = root;
+            root = root->left;
+        } else if(x->data > root->data){
+            root = root->right;
+        } else break;
+    }
+    return succ;
+}
+
+Node* inorderPredecessor(Node* root, Node* x){
+    if(x->left) return maxNode(x->left);
+    Node* pred = NULL;
+    while(root){
+        if(x->data > root->data){
+            pred = root;
+            root = root->right;
+        } else if(x->data < root->data){
+            root = root->left;
+        } else break;
+    }
+    return pred;
+}
+
+int main(){
+    Node* root = NULL;
+    int arr[] = {50, 30, 20, 40, 70, 60, 80};
+    for(int x : arr) root = insert(root, x);
+
+    Node* s1 = searchR(root, 40);
+    Node* s2 = searchNR(root, 60);
+
+    Node* mn = minNode(root);
+    Node* mx = maxNode(root);
+
+    Node* x = searchR(root, 50);
+    Node* succ = inorderSuccessor(root, x);
+    Node* pred = inorderPredecessor(root, x);
+
+    cout << (s1 ? s1->data : -1) << endl;
+    cout << (s2 ? s2->data : -1) << endl;
+    cout << mn->data << endl;
+    cout << mx->data << endl;
+    cout << (succ ? succ->data : -1) << endl;
+    cout << (pred ? pred->data : -1) << endl;
+}
