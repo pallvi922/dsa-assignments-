@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+void heapifyMax(int a[], int n, int i){
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+    int largest = i;
+    if(l < n && a[l] > a[largest]) largest = l;
+    if(r < n && a[r] > a[largest]) largest = r;
+    if(largest != i){
+        int t = a[i]; a[i] = a[largest]; a[largest] = t;
+        heapifyMax(a,n,largest);
+    }
+}
+
+void heapSortIncreasing(int a[], int n){
+    for(int i=n/2-1;i>=0;i--) heapifyMax(a,n,i);
+    for(int i=n-1;i>=0;i--){
+        int t=a[0]; a[0]=a[i]; a[i]=t;
+        heapifyMax(a,i,0);
+    }
+}
+
+void heapifyMin(int a[], int n, int i){
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+    int smallest = i;
+    if(l < n && a[l] < a[smallest]) smallest = l;
+    if(r < n && a[r] < a[smallest]) smallest = r;
+    if(smallest != i){
+        int t = a[i]; a[i] = a[smallest]; a[smallest] = t;
+        heapifyMin(a,n,smallest);
+    }
+}
+
+void heapSortDecreasing(int a[], int n){
+    for(int i=n/2-1;i>=0;i--) heapifyMin(a,n,i);
+    for(int i=n-1;i>=0;i--){
+        int t=a[0]; a[0]=a[i]; a[i]=t;
+        heapifyMin(a,i,0);
+    }
+}
+
+void print(int a[], int n){
+    for(int i=0;i<n;i++) cout<<a[i]<<" ";
+    cout<<endl;
+}
+
+int main(){
+    int a1[]={12, 11, 13, 5, 6, 7};
+    int n1=6;
+
+    int a2[]={12, 11, 13, 5, 6, 7};
+    int n2=6;
+
+    heapSortIncreasing(a1,n1);
+    print(a1,n1);
+
+    heapSortDecreasing(a2,n2);
+    print(a2,n2);
+}
